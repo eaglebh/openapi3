@@ -180,6 +180,8 @@ class Operation(ObjectBase):
                 self._request.headers[name] = value
 
             if spec.in_ == 'cookie':
+                if self._request.cookies is None:
+                    self._request.cookies = {}
                 self._request.cookies[name] = value
 
     def _request_handle_body(self, data):
@@ -251,6 +253,8 @@ class Operation(ObjectBase):
         expected_response = None
         if status_code in self.responses:
             expected_response = self.responses[status_code]
+        elif int(status_code) in self.responses:
+            expected_response = self.responses[int(status_code)]
         elif 'default' in self.responses:
             expected_response = self.responses['default']
 
@@ -285,6 +289,8 @@ class Operation(ObjectBase):
 
         if content_type.lower() == 'application/json':
             return expected_media.schema.model(result.json())
+        elif content_type.startswith('text/'):
+            return result.text
         else:
             raise NotImplementedError()
 
