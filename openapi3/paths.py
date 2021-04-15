@@ -262,7 +262,7 @@ class Operation(ObjectBase):
             # TODO - custom exception class that has the response object in it
             err_msg = '''Unexpected response {} from {} (expected one of {}, \
                          no default is defined'''
-            err_var = result.status_code, self.operationId, ','.join(self.responses.keys())
+            err_var = result.status_code, self.operationId, ','.join([str(k) for k in self.responses.keys()])
 
             raise RuntimeError(err_msg.format(*err_var))
 
