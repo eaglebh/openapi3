@@ -288,9 +288,9 @@ class Operation(ObjectBase):
         response_data = None
 
         if content_type.lower() == 'application/json':
-            return expected_media.schema.model(result.json())
+            return status_code, expected_media.schema.model(result.json())
         elif content_type.startswith('text/'):
-            return result.text
+            return status_code, result.text
         else:
             raise NotImplementedError()
 
